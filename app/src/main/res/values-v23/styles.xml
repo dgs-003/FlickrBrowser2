@@ -6,6 +6,8 @@
             <item name="windowNoTitle">true</item>
             <item name="android:windowDrawsSystemBarBackgrounds">true</item>
             <item name="android:colorBackgroundFloating">@color/primary</item>
+            <item name="android:navigationBarColor">@color/primary</item>
+
         </style>
 
 </resources>

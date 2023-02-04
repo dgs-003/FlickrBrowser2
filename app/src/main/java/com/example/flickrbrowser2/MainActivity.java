@@ -69,6 +69,11 @@ public class MainActivity extends BaseActivity implements GetFlikrJsonData.OnDow
         if (id == R.id.action_settings) {
             return true;
         }
+        if(id==R.id.app_bar_search)
+        {
+            Intent intent=new Intent(this,SearchActivity.class);
+            startActivity(intent);
+        }
         Log.d(TAG, "onOptionsItemSelected() returned: returned");
         return super.onOptionsItemSelected(item);
     }
