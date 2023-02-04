@@ -86,7 +86,7 @@ public class MainActivity extends BaseActivity implements GetFlikrJsonData.OnDow
     @Override
     public void onItemClick(View view, int position) {
         Log.d(TAG, "onItemClick: starts");
-        Toast.makeText(this, "Normal tap at "+position, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Normal tap at "+position, Toast.LENGTH_SHORT).show();
     }
 
     @Override
