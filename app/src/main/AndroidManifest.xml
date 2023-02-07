@@ -15,40 +15,61 @@
         android:theme="@style/Theme.FlickrBrowser2"
         tools:targetApi="31">
         <activity
-            android:name=".PhotoDetailActivity"
-            android:exported="false"
-            android:parentActivityName=".MainActivity"
-            android:label="@string/title_activity_photo_detail"
-            android:theme="@style/Theme.FlickrBrowser2.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.flickrbrowser2.MainActivity" />
-        </activity>
-        <activity
-            android:name=".SearchActivity"
-            android:exported="false"
-            android:parentActivityName=".MainActivity"
-            android:label="@string/title_activity_search"
-            android:theme="@style/Theme.FlickrBrowser2.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.flickrbrowser2.MainActivity" />
-        </activity>
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.FlickrBrowser2.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.SEARCH" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
 
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity
+            android:name=".SearchActivity"
+
+            android:exported="false"
+            android:label="@string/title_activity_search"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.FlickrBrowser2.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.flickrbrowser2.MainActivity" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value="com.example.SearchActivity" />
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+
+        </activity>
+        <activity
+            android:name=".PhotoDetailActivity"
+            android:exported="false"
+            android:label="@string/title_activity_photo_detail"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.FlickrBrowser2.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.flickrbrowser2.MainActivity" />
+        </activity>
+
+
     </application>
 
 </manifest>

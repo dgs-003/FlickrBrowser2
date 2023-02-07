@@ -11,4 +11,8 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="title_activity_photo_detail">PhotoDetailActivity</string>
+    <string name="searchable_hint">Enter photo tags</string>
+    <string name="activity_search">Search</string>
+    <string name="search">Search</string>
+    <string name="hint">Enter photo tags</string>
 </resources>

@@ -1,17 +1,22 @@
 package com.example.flickrbrowser2;
 
+import static android.widget.Toast.*;
+
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +26,8 @@ import java.util.List;
 public class MainActivity extends BaseActivity implements GetFlikrJsonData.OnDownloadAvailable,RecyclerItemClickListerner.OnRecyclerClickListerner{
     private static final String TAG = "MainActivity";
     private FlickrRecyclerViewAdapter mFlickrRecyclerViewAdapter;
-
+private SearchView searchView;
+private String queryResult="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate: starts");
@@ -44,10 +50,21 @@ public class MainActivity extends BaseActivity implements GetFlikrJsonData.OnDow
 
     @Override
     protected void onResume() {
+//        Log.d(TAG, "onResume: starts");
         super.onResume();
-        Log.d(TAG, "onResume: starts");
-        GetFlikrJsonData getFlikrJsonData = new GetFlikrJsonData(this, "https://www.flickr.com/services/feeds/photos_public.gne", "en-us", true);
-        getFlikrJsonData.execute("android, nougat");
+        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String result=sharedPreferences.getString(FLICKR_QUERY,"");
+        if(result.length()>0)
+        {
+            GetFlikrJsonData getFlickrJsonData = new GetFlikrJsonData(this, "https://api.flickr.com/services/feeds/photos_public.gne", "en-us", true);
+//        getFlickrJsonData.executeOnSameThread("android, nougat");
+            getFlickrJsonData.execute(result);
+        }
+//        GetFlikrJsonData getFlickrJsonData = new GetFlikrJsonData(this, "https://api.flickr.com/services/feeds/photos_public.gne", "en-us", true);
+////        getFlickrJsonData.executeOnSameThread("android, nougat");
+//        getFlickrJsonData.execute(queryResult);
+
+//        Log.d(TAG, "onResume ends");
     }
 
     @Override
@@ -55,6 +72,28 @@ public class MainActivity extends BaseActivity implements GetFlikrJsonData.OnDow
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         Log.d(TAG, "onCreateOptionsMenu() returned: " + true);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        SearchableInfo searchableInfo = searchManager.getSearchableInfo(getComponentName());
+        searchView.setSearchableInfo(searchableInfo);
+searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        GetFlikrJsonData getFlickrJsonData = new GetFlikrJsonData(MainActivity.this, "https://api.flickr.com/services/feeds/photos_public.gne", "en-us", true);
+//        getFlickrJsonData.executeOnSameThread("android, nougat");
+        getFlickrJsonData.execute(s);
+        queryResult=s;
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        return false;
+    }
+});
+
+
+
         return true;
     }
 
@@ -67,13 +106,16 @@ public class MainActivity extends BaseActivity implements GetFlikrJsonData.OnDow
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
-        }
-        if(id==R.id.app_bar_search)
-        {
             Intent intent=new Intent(this,SearchActivity.class);
             startActivity(intent);
+            return true;
         }
+        if (id == R.id.action_search) {
+            Intent intent=new Intent(this,SearchActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
         Log.d(TAG, "onOptionsItemSelected() returned: returned");
         return super.onOptionsItemSelected(item);
     }
